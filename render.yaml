@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: odoo-16
+    runtime: docker
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          name: odoo-db
+          property: connectionString
+      - key: DB_PORT
+        value: 5432
+      - key: DB_USER
+        fromDatabase:
+          name: odoo-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: odoo-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: odoo-db
+          property: database
+
+  - type: postgres
+    name: odoo-db
+    plan: free  # Upgrade for production
+    databaseName: odoo
+    user: odoo
